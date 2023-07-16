@@ -103,6 +103,7 @@ const getAllBooksFromDB = async (
     data: result,
   };
 };
+
 export const bookService = {
   createBookInDB,
   getSingleBookFromDB,
