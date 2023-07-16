@@ -12,9 +12,15 @@ const createBookInDb = async (
   user: JwtPayload
 ): Promise<IBook> => {
   payload.createdBy = user.id;
+  payload.publicationDate = new Date();
 
   const createdBook = (await Book.create(payload)).populate('createdBy');
   return createdBook;
+};
+
+const getSingleBookFromDB = async (payload: string): Promise<IBook | null> => {
+  const result = await Book.findOne({ _id: payload }).populate('createdBy');
+  return result;
 };
 
 const getAllBooksFromDb = async (
@@ -75,5 +81,6 @@ const getAllBooksFromDb = async (
 };
 export const bookService = {
   createBookInDb,
+  getSingleBookFromDB,
   getAllBooksFromDb,
 };

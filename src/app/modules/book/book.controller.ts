@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import { paginationFields } from '../../../constants/pagination';
+import ApiError from '../../../errors/ApiError';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
@@ -20,6 +21,26 @@ const createBook: RequestHandler = catchAsync(async (req, res) => {
     message: 'Book created successfully',
     data: result,
   });
+});
+
+const getSingleBook: RequestHandler = catchAsync(async (req, res) => {
+  const id = req.params.id;
+
+  const result = await bookService.getSingleBookFromDB(id);
+
+  if (result === null) {
+    throw new ApiError(
+      404,
+      `Error: Book with ID ${id} is not found. Please verify the provided ID and try again`
+    );
+  } else {
+    sendResponse<IBook>(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Book retrieved successfully',
+      data: result,
+    });
+  }
 });
 
 const getAllBooks: RequestHandler = catchAsync(async (req, res) => {
@@ -42,5 +63,6 @@ const getAllBooks: RequestHandler = catchAsync(async (req, res) => {
 
 export const bookController = {
   createBook,
+  getSingleBook,
   getAllBooks,
 };
