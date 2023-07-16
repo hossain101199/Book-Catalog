@@ -42,6 +42,11 @@ const updateBookBookInDB = async (
   return result;
 };
 
+const deleteBookFromDB = async (payload: string): Promise<IBook | null> => {
+  const result = await Book.findByIdAndDelete(payload).populate('createdBy');
+  return result;
+};
+
 const getAllBooksFromDB = async (
   filters: IBookFilters,
   paginationOptions: IPaginationOptions
@@ -102,5 +107,6 @@ export const bookService = {
   createBookInDB,
   getSingleBookFromDB,
   updateBookBookInDB,
+  deleteBookFromDB,
   getAllBooksFromDB,
 };

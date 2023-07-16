@@ -58,7 +58,27 @@ const updateBook: RequestHandler = catchAsync(async (req, res) => {
     sendResponse<IBook>(res, {
       statusCode: 200,
       success: true,
-      message: 'Book retrieved successfully',
+      message: 'Book updated successfully',
+      data: result,
+    });
+  }
+});
+
+const deleteBook: RequestHandler = catchAsync(async (req, res) => {
+  const id = req.params.id;
+
+  const result = await bookService.deleteBookFromDB(id);
+
+  if (result === null) {
+    throw new ApiError(
+      404,
+      `Error: Book with ID ${id} is not found. Please verify the provided ID and try again`
+    );
+  } else {
+    sendResponse<IBook>(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Book deleted successfully',
       data: result,
     });
   }
@@ -86,5 +106,6 @@ export const bookController = {
   createBook,
   getSingleBook,
   updateBook,
+  deleteBook,
   getAllBooks,
 };
