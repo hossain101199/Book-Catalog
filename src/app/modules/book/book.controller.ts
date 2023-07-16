@@ -13,7 +13,7 @@ const createBook: RequestHandler = catchAsync(async (req, res) => {
   const book = req.body;
   const user = req.verifiedUser as JwtPayload;
 
-  const result = await bookService.createBookInDb(book, user);
+  const result = await bookService.createBookInDB(book, user);
 
   sendResponse<IBook>(res, {
     statusCode: 200,
@@ -43,11 +43,32 @@ const getSingleBook: RequestHandler = catchAsync(async (req, res) => {
   }
 });
 
+const updateBook: RequestHandler = catchAsync(async (req, res) => {
+  const id = req.params.id;
+  const updatedBookData = req.body;
+
+  const result = await bookService.updateBookBookInDB(id, updatedBookData);
+
+  if (result === null) {
+    throw new ApiError(
+      404,
+      `Error: Book with ID ${id} is not found. Please verify the provided ID and try again`
+    );
+  } else {
+    sendResponse<IBook>(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Book retrieved successfully',
+      data: result,
+    });
+  }
+});
+
 const getAllBooks: RequestHandler = catchAsync(async (req, res) => {
   const filters = pick(req.query, bookFilterableFields);
   const paginationOptions = pick(req.query, paginationFields);
 
-  const result = await bookService.getAllBooksFromDb(
+  const result = await bookService.getAllBooksFromDB(
     filters,
     paginationOptions
   );
@@ -64,5 +85,6 @@ const getAllBooks: RequestHandler = catchAsync(async (req, res) => {
 export const bookController = {
   createBook,
   getSingleBook,
+  updateBook,
   getAllBooks,
 };

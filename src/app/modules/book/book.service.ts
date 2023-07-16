@@ -1,5 +1,6 @@
 import { JwtPayload } from 'jsonwebtoken';
 import { SortOrder } from 'mongoose';
+import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
@@ -7,7 +8,7 @@ import { bookSearchableFields } from './book.constant';
 import { IBook, IBookFilters } from './book.interface';
 import { Book } from './book.model';
 
-const createBookInDb = async (
+const createBookInDB = async (
   payload: IBook,
   user: JwtPayload
 ): Promise<IBook> => {
@@ -23,7 +24,25 @@ const getSingleBookFromDB = async (payload: string): Promise<IBook | null> => {
   return result;
 };
 
-const getAllBooksFromDb = async (
+const updateBookBookInDB = async (
+  id: string,
+  payload: IBook
+): Promise<IBook | null> => {
+  if (payload.createdBy) {
+    throw new ApiError(
+      403,
+      'Forbidden: You are not allowed to update the createdBy field.'
+    );
+  }
+
+  const result = await Book.findByIdAndUpdate(id, payload, {
+    new: true,
+  }).populate('createdBy');
+
+  return result;
+};
+
+const getAllBooksFromDB = async (
   filters: IBookFilters,
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<IBook[]>> => {
@@ -80,7 +99,8 @@ const getAllBooksFromDb = async (
   };
 };
 export const bookService = {
-  createBookInDb,
+  createBookInDB,
   getSingleBookFromDB,
-  getAllBooksFromDb,
+  updateBookBookInDB,
+  getAllBooksFromDB,
 };
