@@ -12,7 +12,8 @@ import { errorLogger } from '../../shared/logger';
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
   // eslint-disable-next-line no-unused-expressions
   config.env === 'development'
-    ? console.log(
+    ? // eslint-disable-next-line no-console
+      console.log(
         `===============================>>>>>>>>>>>>>>>>> globalErrorHandler ~~`,
         error
       )
