@@ -15,8 +15,8 @@ const bookSchema = new Schema<IBook>(
       type: String,
       required: true,
     },
-    publicationDate: {
-      type: Date,
+    publicationYear: {
+      type: String,
       required: true,
     },
     createdBy: {

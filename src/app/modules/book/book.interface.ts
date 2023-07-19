@@ -5,7 +5,7 @@ export type IBook = {
   title: string;
   author: string;
   genre: string;
-  publicationDate: Date;
+  publicationYear: string;
   createdBy: Types.ObjectId | IUser;
 };
 
@@ -14,6 +14,5 @@ export type IBookFilters = {
   title?: string;
   author?: string;
   genre?: string;
-  publicationDate?: string;
-  createdBy?: string;
+  publicationYear?: string;
 };

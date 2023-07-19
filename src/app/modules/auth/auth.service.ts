@@ -3,11 +3,13 @@ import jwt, { Secret } from 'jsonwebtoken';
 import config from '../../../config';
 import ApiError from '../../../errors/ApiError';
 import { IUser } from '../user/user.interface';
+
 import { User } from '../user/user.model';
 import { ILoginUser, ILoginUserResponse } from './auth.interface';
 
 const createUserInDB = async (payload: IUser): Promise<IUser> => {
   const createdUser = await User.create(payload);
+
   return createdUser;
 };
 

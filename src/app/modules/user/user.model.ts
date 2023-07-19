@@ -14,7 +14,10 @@ const userSchema = new Schema<IUser>(
       required: true,
       unique: true,
     },
-    password: { type: String, required: true },
+    password: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
@@ -27,15 +30,12 @@ const userSchema = new Schema<IUser>(
   }
 );
 
-// This code is executed before saving a user document to the database
 userSchema.pre('save', async function (next) {
-  // Hash the password using bcrypt
   this.password = await bcrypt.hash(
     this.password,
     Number(config.bcrypt_salt_rounds)
   );
 
-  // Call the next middleware or save the document
   next();
 });
 
