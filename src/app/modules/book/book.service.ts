@@ -13,7 +13,6 @@ const createBookInDB = async (
   user: JwtPayload
 ): Promise<IBook> => {
   payload.createdBy = user.id;
-  payload.publicationDate = new Date();
 
   const createdBook = (await Book.create(payload)).populate('createdBy');
   return createdBook;
